@@ -28,9 +28,16 @@ def generate_launch_description():
         ])
     )
 
+    swap=Node(
+        package='gazebo_ros',
+        executable='spawn_entity.py',
+        arguments=['-topic','robot_description','-entity','my_robot'],
+        output='screen'
+    )
+
 
     return LaunchDescription([
         rsp,
-        gazebo
-        
+        gazebo,
+        swap
     ])
