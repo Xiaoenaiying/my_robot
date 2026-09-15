@@ -1,5 +1,7 @@
 <?xml version="1.0"?>
+<xacro:include filename="Moment_of_inertia.xacro"/>
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+    
 
     <material name="blue">
         <color rgba="0 0 1 1"/>
@@ -37,6 +39,7 @@
             <origin xyz="0 0 0" rpy="0 0 0"/>
             <material name="blue"/>
         </collision>
+        <xacro:box_inertia mass="1.0" x="0.2" y="0.34" z="0.09" o_xyz="0 0 0" o_rpy="0 0 0"/>
     </link>
 
     <!--joint base,chssis-->
@@ -63,6 +66,7 @@
             <origin xyz="0 0 0" rpy="0 0 0"/>
             <material name="black"/>
         </collision>
+        <xacro:Cylinder_inertia mass="1.0" R="0.045" H="0.03" o_xyz="0 0 0" o_rpy="0 0 0"/>
     </link>
 
     <link name="Front_rightwheel">
@@ -80,6 +84,7 @@
             <origin xyz="0 0 0" rpy="0 0 0"/>
             <material name="black"/>
         </collision>
+        <xacro:Cylinder_inertia mass="1.0" R="0.045" H="0.03" o_xyz="0 0 0" o_rpy="0 0 0"/>
     </link>
 
     <link name="rear_leftwheel">
@@ -97,6 +102,7 @@
             <origin xyz="0 0 0" rpy="0 0 0"/>
             <material name="black"/>
         </collision>
+        <xacro:Cylinder_inertia mass="1.0" R="0.045" H="0.03" o_xyz="0 0 0" o_rpy="0 0 0"/>
     </link>
 
     <link name="rear_rightwheel">
@@ -114,6 +120,7 @@
             <origin xyz="0 0 0" rpy="0 0 0"/>
             <material name="black"/>
         </collision>
+        <xacro:Cylinder_inertia mass="1.0" R="0.045" H="0.03" o_xyz="0 0 0" o_rpy="0 0 0"/>
     </link>
 
     <!--joint chassis,wheels-->
