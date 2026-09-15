@@ -29,7 +29,20 @@ def generate_launch_description():
         parameters=[params]
     )
 
+    rviz2=Node(
+        package='rviz2',
+        executable='rviz2',
+        name='rviz2',
+        output='screen'
+    )
 
+    joint_control_gui=Node(
+        package='joint_state_publisher_gui',
+        executable='joint_state_publisher_gui'
+    )
+
+    
+            
     # Launch!
     return LaunchDescription([
         DeclareLaunchArgument(
@@ -37,5 +50,7 @@ def generate_launch_description():
             default_value='false',
             description='Use sim time if true'),
 
-        node_robot_state_publisher
+        node_robot_state_publisher,
+        rviz2,
+        joint_control_gui
     ])

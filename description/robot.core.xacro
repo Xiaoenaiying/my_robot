@@ -1,0 +1,147 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+    <material name="blue">
+        <color rgba="0 0 1 1"/>
+    </material>
+
+    <material name="black">
+        <color rgba="0 0 0 1"/>
+    </material>
+    <link name="base_footprint">
+    </link>
+
+    <joint name="base_link" type="fixed">
+        <parent link="base_footprint"/>
+        <child link="base_link"/>
+        <origin xyz="0 0.17 0.03" rpy="0 0 0"/>
+    </joint>
+
+    <link name="base_link">
+    </link>
+
+    <!-- chassis link -->
+
+    <link name="chassis">
+        <visual>
+            <geometry>
+                <box size="0.2 0.34 0.09"/>
+            </geometry>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <material name="blue"/>
+        </visual>
+        <collision>
+            <geometry>
+                <box size="0.2 0.34 0.09"/>
+            </geometry>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <material name="blue"/>
+        </collision>
+    </link>
+
+    <!--joint base,chssis-->
+
+    <joint name="chssis_joint" type="fixed">
+        <parent link="base_link"/>
+        <child link="chassis"/>
+        <origin xyz="0 0 0.045" rpy="0 0 0"/>
+    </joint>
+
+    <!--wheel links-->
+    <link name="Front_leftwheel">
+        <visual>
+            <geometry>
+                <cylinder length="0.03" radius="0.045"/>
+            </geometry>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <material name="black"/>
+        </visual>
+        <collision>
+            <geometry>
+                <cylinder length="0.03" radius="0.045"/>
+            </geometry>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <material name="black"/>
+        </collision>
+    </link>
+
+    <link name="Front_rightwheel">
+        <visual>
+            <geometry>
+                <cylinder length="0.03" radius="0.045"/>
+            </geometry>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <material name="black"/>
+        </visual>
+        <collision>
+            <geometry>
+                <cylinder length="0.03" radius="0.045"/>
+            </geometry>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <material name="black"/>
+        </collision>
+    </link>
+
+    <link name="rear_leftwheel">
+        <visual>
+            <geometry>
+                <cylinder length="0.03" radius="0.045"/>
+            </geometry>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <material name="black"/>
+        </visual>
+        <collision>
+            <geometry>
+                <cylinder length="0.03" radius="0.045"/>
+            </geometry>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <material name="black"/>
+        </collision>
+    </link>
+
+    <link name="rear_rightwheel">
+        <visual>
+            <geometry>
+                <cylinder length="0.03" radius="0.045"/>
+            </geometry>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <material name="black"/>
+        </visual>
+        <collision>
+            <geometry>
+                <cylinder length="0.03" radius="0.045"/>
+            </geometry>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <material name="black"/>
+        </collision>
+    </link>
+
+    <!--joint chassis,wheels-->
+    <joint name="front_leftwheel_joint" type="continuous">
+        <parent link="chassis"/>
+        <child link="Front_leftwheel"/>
+        <origin xyz="-0.115 0.12 -0.03" rpy="0 -${pi/2} 0"/>
+        <axis xyz="0 0 -1"/>
+    </joint>
+
+    <joint name="front_rightwheel_joint" type="continuous">
+        <parent link="chassis"/>
+        <child link="Front_rightwheel"/>
+        <origin xyz="0.115 0.12 -0.03" rpy="0 ${pi/2} 0"/>
+        <axis xyz="0 0 1"/>
+    </joint>
+
+    <joint name="rear_leftwheel_joint" type="continuous">
+        <parent link="chassis"/>
+        <child link="rear_leftwheel"/>
+        <origin xyz="-0.115 -0.12 -0.03" rpy="0 -${pi/2} 0"/>
+        <axis xyz="0 0 -1"/>
+    </joint>
+
+    <joint name="rear_rightwheel_joint" type="continuous">
+        <parent link="chassis"/>
+        <child link="rear_rightwheel"/>
+        <origin xyz="0.115 -0.12 -0.03" rpy="0 ${pi/2} 0"/>
+        <axis xyz="0 0 1"/>
+    </joint>
+</robot>
