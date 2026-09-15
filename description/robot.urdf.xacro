@@ -3,5 +3,6 @@
 
     <!-- Example link -->
     <xacro:include filename="robot.core.xacro"/>
-    
+    <xacro:include filename="robot_control.xacro"/>
+
 </robot>
