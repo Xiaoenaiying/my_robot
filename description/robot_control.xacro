@@ -2,9 +2,7 @@
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro">
     <gazebo>
         <plugin name="four_wheel_diff_drive" filename="libgazebo_ros_diff_drive.so">
-            <left_joint>front_leftwheel_joint</left_joint>
             <left_joint>rear_leftwheel_joint</left_joint>
-            <right_joint>front_rightwheel_joint</right_joint>
             <right_joint>rear_rightwheel_joint</right_joint>
             
             <wheel_separation>0.34</wheel_separation>
