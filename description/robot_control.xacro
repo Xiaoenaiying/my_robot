@@ -3,12 +3,10 @@
     <gazebo>
         <plugin name="gazebo_ros_control" filename="libgazebo_ros_diff_drive.so">
             <left_joint>front_leftwheel_joint</left_joint>
-            <right_joint>front_rightwheel_joint</right_joint>
-            <wheel_separation>0.34</wheel_separation>
-            <wheel_radius>0.45</wheel_radius>
-
             <left_joint>rear_leftwheel_joint</left_joint>
+            <right_joint>front_rightwheel_joint</right_joint>
             <right_joint>rear_rightwheel_joint</right_joint>
+            
             <wheel_separation>0.34</wheel_separation>
             <wheel_radius>0.45</wheel_radius>
 
