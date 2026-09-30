@@ -1,0 +1,31 @@
+controller_manager:
+  ros_parameters:
+    update_rate:150
+
+    joint_state_controller:
+      type:joint_state_broadcaster/JointStateBroadcaster
+    
+    diff_drvier_controller:
+      type:diff_drive_controller/DiffDriveController
+
+diff_driver_controller:
+  ros_parameters:
+    left_wheel_names:["rear_leftwheel_joint"]
+    right_wheel_names:["rear_rightwheel_joint"]
+  
+    wheel_separation:0.23
+    wheel_radius:0.45
+
+    odom_frame_id:"odom"
+    base_frame_id:"base_footprint"
+
+    pose_covariance_diagonal:[0.001,0.001,0.001,0.001,0.001,0.001]
+    twist_covariance_diagonal:[0.001,0.001,0.001,0.001,0.001,0.001]
+
+    enable_odom_tf:true
+    publish_rate:150.0
+
+    linear.x.max_velocity:4.0
+    linear.x.min_velocity:-2
+    angular.z.max_velocity:1.5
+    angular.z.max_velocity:-2
