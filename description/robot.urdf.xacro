@@ -4,5 +4,5 @@
     <!-- Example link -->
     <xacro:include filename="robot.core.xacro"/>
     <xacro:include filename="robot_control.xacro"/>
-
+    <xacro:include filename="mobile_base.ros2_control.xacro"/>
 </robot>

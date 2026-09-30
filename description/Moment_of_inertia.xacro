@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 
-<robot xmlns:xacro="http://www.ros.org/wiki/xacro"  name="robot">
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
     <!--转动惯量-->
     <xacro:macro name="box_inertia" params="mass x y z o_xyz o_rpy">
         <inertial>

@@ -22,7 +22,7 @@ def generate_launch_description():
         launch_arguments={"use_sim_time":"true"}.items()
     )
 
-    gazebo=IncludeLaunchDescription(
+    """gazebo=IncludeLaunchDescription(
         PythonLaunchDescriptionSource([
             os.path.join(get_package_share_directory("gazebo_ros"),"launch","gazebo.launch.py")
         ])
@@ -34,10 +34,8 @@ def generate_launch_description():
         arguments=['-topic','robot_description','-entity','my_robot'],
         output='screen'
     )
-
+    """
 
     return LaunchDescription([
-        rsp,
-        gazebo,
-        swap
+        rsp
     ])
