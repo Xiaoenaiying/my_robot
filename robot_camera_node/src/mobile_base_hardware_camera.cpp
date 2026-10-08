@@ -1,15 +1,12 @@
-#include "../include/mobile_base_hardware_camera.hpp"
+#include "../include/robot_camera_node/mobile_base_hardware_camera.hpp"
 #include <linux/videodev2.h>
 #include <cstring>
 #include <opencv2/opencv.hpp>
 /*
  *@brief打开相机端口，查看端口支持的类型
  */
-bool my_robot_camera::camera_open(int n){
-    std::string Camera_id="/dev";
-    std::string Camera_name="video";
-    Camera_name+=std::to_string(n);
-    std::string Camera_fd=Camera_id+"/"+Camera_name;
+bool my_robot_camera::camera_open(std::string device_path){
+    std::string Camera_fd=device_path;
     std::string cmera_port=Camera_fd;
     scan_fd=::open(cmera_port.c_str(),O_RDWR);
     if(scan_fd<0){
@@ -17,7 +14,8 @@ bool my_robot_camera::camera_open(int n){
         scan_fd=-1;
         return false;
     }
-    v4l2_capability cap={0};
+    v4l2_capability cap;
+    memset(&cap,0,sizeof(cap));
     if(::ioctl(scan_fd,VIDIOC_QUERYCAP,&cap)<0){
         scan_fd=-1;
         return false;
@@ -28,7 +26,7 @@ bool my_robot_camera::camera_open(int n){
         return false;
     }
     if(!(V4L2_CAP_STREAMING&cap.capabilities)){
-        std::cerr<<"不支持流式传输"<<"n";
+        std::cerr<<"不支持流式传输"<<"\n";
     }
     std::cout<<"成功打开"<<Camera_fd<<"设备";
     return true;
@@ -40,7 +38,8 @@ bool my_robot_camera::camera_open(int n){
 void my_robot_camera::camera_formats(void){
     memset(cam_fmts,0,sizeof(cam_fmts));
     //原始数据
-    v4l2_fmtdesc fmtdesc={0};
+    v4l2_fmtdesc fmtdesc;
+    memset(&fmtdesc,0,sizeof(fmtdesc));
     fmtdesc.index=0;
     fmtdesc.type=V4L2_BUF_TYPE_VIDEO_CAPTURE;
     while(0==ioctl(scan_fd,VIDIOC_ENUM_FMT,&fmtdesc)){
@@ -57,8 +56,10 @@ void my_robot_camera::camera_formats(void){
  *@brief打印格式
  */
 bool my_robot_camera::camera_formats_print(void){
-    v4l2_frmsizeenum frmsize{0};
-    v4l2_frmivalenum frmival{0};
+    v4l2_frmsizeenum frmsize;
+    memset(&frmsize,0,sizeof(frmsize));
+    v4l2_frmivalenum frmival;
+    memset(&frmival,0,sizeof(frmival));
     frmsize.type=V4L2_BUF_TYPE_VIDEO_CAPTURE;
     frmival.type=V4L2_BUF_TYPE_VIDEO_CAPTURE;
     for(int i=0;cam_fmts[i].pixelformat;++i){
@@ -84,17 +85,20 @@ bool my_robot_camera::camera_formats_print(void){
         }
         std::cout<<"\n";
     }
-    return false;
+    return true;
 }
 /*
  *@brief先再次初始化，设置采集相机格式，通过ioctl函数（VIDIOC_G_PARM从驱动里获取是否支持，
  VIDIOC_S_PARM设置采集的分辨率和格式
  */
 bool my_robot_camera::camera_formats_setting(const camera_config &Camera_config){
+    if(scan_fd>0){
+        ::close(scan_fd);
+        scan_fd=-1;
+    }
     v4l2_format fmt{};
     v4l2_streamparm streamparm{};
-    std::string camera_real_port=Camera_config.camera_id+"/"+Camera_config.camera_name;
-    video_dervice=Camera_config.camera_name;
+    std::string camera_real_port=Camera_config.camera_path;
     fd=::open(camera_real_port.c_str(),O_RDWR);
     if(0>fd){
         std::cerr<<"打开目标相机失败"<<"\n";
@@ -127,25 +131,9 @@ bool my_robot_camera::camera_formats_setting(const camera_config &Camera_config)
         std::cout<<"ioctl:error"<<"\n";
         return false;
     }
-    //判断是否设置为YUYV像素格式
-    if(!(V4L2_PIX_FMT_YUYV==fmt.fmt.pix.pixelformat)){
-        std::cout<<"Error:the drivce does not support YUYV format\n";
-        return false;
-    }
-    if(!(V4L2_PIX_FMT_MJPEG==fmt.fmt.pix.pixelformat)){
-        std::cout<<"Error:the drivce does not support MJPEG format\n";
-        return false;
-    }
-    if(!(V4L2_PIX_FMT_GREY==fmt.fmt.pix.pixelformat)){
-        std::cout<<"Error:the drivce does not support GREY format\n";
-        return false;
-    }
-    if(!(V4L2_PIX_FMT_Y10==fmt.fmt.pix.pixelformat)){
-        std::cout<<"Error:the drivce does not support Y10 format\n";
-        return false;
-    }
-    if(!(V4L2_PIX_FMT_Y16==fmt.fmt.pix.pixelformat)){
-        std::cout<<"Error:the drivce does not support Y16 format\n";
+    //判断格式是否设置正确
+    if(static_cast<__u32>(Camera_config.camera_formats)!=fmt.fmt.pix.pixelformat){
+        std::cout<<"注意: 驱动实际设置的格式与请求的格式不一致（可能是驱动不支持）\n";
         return false;
     }
     int frm_width=fmt.fmt.pix.width;//获取实际的帧宽度
@@ -193,6 +181,7 @@ bool my_robot_camera::camera_init_buf(int camera_buffer_size){
         fd,buf.m.offset);
         if(MAP_FAILED==Camera_buffer[buf.index].start){
             std::cerr<<"内存映射失败"<<"\n";
+            return false;
         }
     }
     for(buf.index=0;buf.index<reqbuf.count;++buf.index){
@@ -221,44 +210,87 @@ bool my_robot_camera::camera_stream_on(void){
 /*
  *@brief调用opencv接收图像显示 ，开始真的出队（处理信息），入队（保存摄像头画面缓冲区指针）
  */
-bool my_robot_camera::camera_opencv_read(int Camera_width,int Camera_hight,int camera_formats){
+cv::Mat my_robot_camera::camera_opencv_read(int Camera_width,int Camera_hight,int camera_formats,FlipMode flip_mode){
+    if(fd<0){
+        std::cout<<"此设备未打开"<<"\n";
+        ::close(fd);
+        return cv::Mat();
+    }
     v4l2_buffer buf;
     buf.type=V4L2_BUF_TYPE_VIDEO_CAPTURE;
     buf.memory=V4L2_MEMORY_MMAP;
     if(0>ioctl(fd,VIDIOC_DQBUF,&buf)){
         std::cout<<"出队失败"<<"\n";
-        return false;
+        return cv::Mat();
     }
     camera_address=Camera_buffer[buf.index].start;
+    cv::Mat output_frame;
     if(camera_formats==V4L2_PIX_FMT_YUYV){
         cv::Mat camera_yuyv(Camera_hight,Camera_width,CV_8UC2,camera_address);
-        cv::Mat camera_bgr;
-        cv::cvtColor(camera_yuyv,camera_bgr,cv::COLOR_YUV2BGR_YUYV);
-        //颠倒画面
-        cv::flip(camera_bgr,camera_bgr,-1);
-        cv::imshow("camera_bgr",camera_bgr);
+        cv::cvtColor(camera_yuyv,output_frame,cv::COLOR_YUV2BGR_YUYV);
     }
     //MJPEG压缩数据包装一维数组,再交给imdecode解码显示
-    if(camera_formats==V4L2_PIX_FMT_MJPEG){
+    else if(camera_formats==V4L2_PIX_FMT_MJPEG){
         cv::Mat camera_MJPEG(1,static_cast<int>(buf.bytesused),CV_8UC1,camera_address);//把数据包装成一维数组
-        cv::Mat camera_rgb=cv::imdecode(camera_MJPEG,cv::IMREAD_COLOR);
-        if(video_dervice=="/video6"){
-            cv::flip(camera_rgb,camera_rgb,-1);
-        }
-        cv::imshow("camera_rgb",camera_rgb);
+        output_frame=cv::imdecode(camera_MJPEG,cv::IMREAD_COLOR);
     }
-    if(camera_formats==V4L2_PIX_FMT_GREY){
+    else if(camera_formats==V4L2_PIX_FMT_GREY){
         cv::Mat camera_GREY(Camera_hight,Camera_width,CV_8UC1,camera_address);
-        cv::Mat grey_video;
-        //调用cv::GaussianBlur来实现高斯模糊函数，使得图像光滑,主要是第三个参数高斯核
-        cv::GaussianBlur(camera_GREY,grey_video,cv::Size(5,5),0);
-        cv::imshow("grey_video",grey_video);
+        output_frame=camera_GREY.clone();
+    }
+    else if(camera_formats==V4L2_PIX_FMT_Y10){
+        cv::Mat camera_depth(Camera_hight,Camera_width,CV_16UC1,camera_address);
+        output_frame=camera_depth.clone();
+    }
+    else if(camera_formats==V4L2_PIX_FMT_Y16){
+        cv::Mat camera_depth(Camera_hight,Camera_width,CV_16UC1,camera_address);
+        output_frame=camera_depth.clone();
+    }
+    else{
+        std::cerr << "错误：不支持的像素格式！\n";
+        ioctl(fd,VIDIOC_QBUF,&buf);
+        return cv::Mat();
+    }
+    switch(flip_mode){
+        case FlipMode::HORIZONTAL:
+            cv::flip(output_frame, output_frame, 1);
+            break;
+        case FlipMode::BOTH:
+            cv::flip(output_frame,output_frame,-1);
+            break;
+        case FlipMode::NONE:
+            break;
+        case FlipMode::VERTICAL:
+            cv::flip(output_frame,output_frame,0);
+            break;
+        default:
+            break;
     }
     if(0>ioctl(fd,VIDIOC_QBUF,&buf)){
         std::cout<<"入队失败"<<"\n";
-        return false;
+        return cv::Mat();
     }
-    cv::waitKey(1);
     camera_address=nullptr;
-    return true;
+    return output_frame;
+}
+
+
+/*
+ *@breif此函数关闭相机描述符，释放资源
+ */
+void my_robot_camera::camera_close(void){
+    if(fd>0){
+        v4l2_buf_type type=V4L2_BUF_TYPE_VIDEO_CAPTURE;//关闭类型为视频采集流
+        ioctl(fd,VIDIOC_STREAMOFF,&type);
+        //把每块缓冲区的指针交给buf
+        for(auto &buf:Camera_buffer){
+            //指针不为空（不是 nullptr）而且不是映射失败的返回值
+            if(buf.start&&buf.start!=MAP_FAILED){
+                munmap(buf.start,buf.length);
+            }
+        }
+        Camera_buffer.clear();//清除缓冲区
+        ::close(fd);
+        fd=-1;
+    }
 }

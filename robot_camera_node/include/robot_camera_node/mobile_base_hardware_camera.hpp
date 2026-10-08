@@ -8,13 +8,23 @@
 #include <vector>
 #include <linux/videodev2.h>
 #include <sys/mman.h>
+#include <opencv2/opencv.hpp>
+  
+//opencv里的翻转
+enum class FlipMode {
+    VERTICAL = 0,   // 对应 cv::flip 的 0(不翻转)
+    HORIZONTAL = 1, // 对应 cv::flip 的 1(水平)
+    BOTH =2,      // 对应 cv::flip 的 -1(垂直)
+    NONE =3        // 注意：OpenCV没有2这个值，所以NONE需要单独处理(180)
+};
+
 struct camera_config{
-    std::string camera_id;
-    std::string camera_name;
+    std::string camera_path;
     int camera_width;
     int camera_hight;
     int camera_formats;//像素格式需要填入和V4L2_PIX_FMT_YUYV类似的参数
     int FPS;//设置帧率
+    FlipMode flip_mode;
 };
 
 struct camera_buffer{
@@ -24,13 +34,14 @@ struct camera_buffer{
 
 class my_robot_camera{
 public:
-    bool camera_open(int n);
+    bool camera_open(std::string device_path);
     void camera_formats(void);
     bool camera_formats_print(void);
     bool camera_formats_setting(const camera_config &Camera_config);
     bool camera_init_buf(int camera_buffer_size);
     bool camera_stream_on(void);
-    bool camera_opencv_read(int Camera_width,int Camera_hight,int camera_formats);
+    cv::Mat camera_opencv_read(int Camera_width,int Camera_hight,int camera_formats,FlipMode flip_mode);
+    void camera_close(void);
 private:
     int fd=-1;
     int scan_fd=-1;//临时扫描
@@ -40,8 +51,6 @@ private:
     std::vector<camera_buffer>Camera_buffer;
     //一帧生命周期内保存画面
     void *camera_address;
-    //设备选择保存
-    std::string video_dervice;
 };
 
 
