@@ -50,7 +50,7 @@ class ShapeRecognizer(Node):
             self.get_logger().info(f"类型为{s['type']},中心点为{s['cx']}{s['cy']}"
                                     f"面积为{s['area']},顶点数{s['vertex_count']}")
         cam_debug=self.draw_result(frame,shapes)
-        self.debug.publish(self.bridge.cv2_to_imgmsg(cam_debug,"mono8"))
+        self.debug.publish(self.bridge.cv2_to_imgmsg(cam_debug,"bgr8"))
 
 
 
@@ -107,7 +107,7 @@ class ShapeRecognizer(Node):
         if(vertex_count==3):
             return "triangle"
         elif(vertex_count==4):
-            x,y,w,h=cv2.boundingRact(approx)
+            x,y,w,h=cv2.boundingRect(approx)
             aspect=w/float(h)#计算宽长比
             if (0.9<=aspect) and (aspect<=1.1):
                 return "square"
@@ -135,9 +135,11 @@ class ShapeRecognizer(Node):
             if s["type"]=="circle":
                 cv2.circle(cam_debug,(s["cx"],s["cy"]),5,(0,0,255),-1)
             else:
-                cv2.polylines(cam_debug,[s["approx"]],True)#绘制多边形
+                cv2.polylines(cam_debug,[s["approx"]],True,(0,255,0),2)#绘制多边形
             #打印识别框
-            cv2.putText(cam_debug,s["type"],(s["cx"]-40,s["cy"]-20),cv2.FONT_HERSHEY_SIMPLEX,0.7
+            cx=int(s["cx"])
+            cy=int(s["cy"])
+            cv2.putText(cam_debug,s["type"],(cx-40,cy-20),cv2.FONT_HERSHEY_SIMPLEX,0.7,
                                 (255,0,0),2)
 
 

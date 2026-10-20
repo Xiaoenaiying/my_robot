@@ -23,7 +23,7 @@ setup(
     maintainer_email='your_email@example.com',
     description='OpenCV shape recognition node',
     license='TODO',
-    tests_require=['pytest'],
+    #tests_require=['pytest'],
     entry_points={
         'console_scripts': [
             # 这一行最关键：注册可执行命令

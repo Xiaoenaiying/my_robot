@@ -8,9 +8,9 @@ int main(int argc,char** argv){
     rclcpp::init(argc,argv);
     auto node=std::make_shared<rclcpp::Node>("camera_node");
     //注册参数，并添加默认值
-    node->declare_parameter<std::string>("device_path","/dev/video0");
-    node->declare_parameter<int>("width",1280);
-    node->declare_parameter<int>("height",720);
+    node->declare_parameter<std::string>("device_path","/dev/video4");
+    node->declare_parameter<int>("width",640);
+    node->declare_parameter<int>("height",640);
     node->declare_parameter<std::string>("format","V4L2_PIX_FMT_MJPEG");
     node->declare_parameter<int>("FPS",30);
     node->declare_parameter<std::string>("flip_mode","HORIZONTAL");
@@ -75,7 +75,7 @@ int main(int argc,char** argv){
         if(robot_camera.camera_open(device_path)){
             robot_camera.camera_formats();
             robot_camera.camera_formats_print();
-            Camera_conifg.camera_path=device_path;
+            ::fclose(device_path);
             break;
         }
         else{
