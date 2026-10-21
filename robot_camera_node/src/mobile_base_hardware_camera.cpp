@@ -11,24 +11,31 @@ bool my_robot_camera::camera_open(std::string device_path){
     scan_fd=::open(cmera_port.c_str(),O_RDWR);
     if(scan_fd<0){
         std::cerr<<"相机端口不支持打开"<<"\n";
+        ::close(scan_fd);
         scan_fd=-1;
         return false;
     }
     v4l2_capability cap;
     memset(&cap,0,sizeof(cap));
     if(::ioctl(scan_fd,VIDIOC_QUERYCAP,&cap)<0){
+        ::close(scan_fd);
         scan_fd=-1;
         return false;
     }
     if(!(V4L2_CAP_VIDEO_CAPTURE&cap.capabilities)){
         std::cerr<<"不支持视频采集"<<"\n";
+        ::close(scan_fd);
         scan_fd=-1;
         return false;
     }
     if(!(V4L2_CAP_STREAMING&cap.capabilities)){
+        ::close(fd);
+        scan_fd=-1;
         std::cerr<<"不支持流式传输"<<"\n";
     }
     std::cout<<"成功打开"<<Camera_fd<<"设备";
+    ::close(scan_fd);
+    scan_fd=-1;
     return true;
 }
 

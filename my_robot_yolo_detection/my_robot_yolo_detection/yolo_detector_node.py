@@ -1,8 +1,7 @@
 import sys
+# 强行把系统自带的正确路径插入到搜索列表的最前面
+sys.path.insert(0, '/usr/lib/python3/dist-packages')
 import os
-# 把你自己源码所在的绝对路径加进来
-sys.path.append('/home/sunrise/dev_learn/src/my_robot_yolo_detection')
-sys.path.append('/home/sunrise/dev_learn/src/my_robot_yolo_detection/my_robot_yolo_detection')
 import rclpy
 from rclpy.node import Node
 from sensor_msgs.msg import Image
@@ -12,6 +11,7 @@ from typing import Optional, Dict, Tuple
 import os
 import cv2
 import hbm_runtime
+print("实际加载的 hbm_runtime 路径是:", hbm_runtime.__file__)
 import utils.preprocess_utils as preprocess
 import utils.postprocess_utils as postprocess
 import utils.common_utils as common
@@ -23,7 +23,7 @@ class yolo_detector_node(Node):
         super().__init__("yolo_detector_node")
         self.pkg_name=get_package_share_directory("my_robot_yolo_detection")
         model_path=os.path.join(self.pkg_name,"models","yolo_v8purple_block_bayese_640x640_nv12.bin")
-        self.model=hbm_runtime.HB_HBMRuntime([model_path])
+        self.model=hbm_runtime.HB_HBMRuntime(model_path)
         #----------------配置字典顶层---------------------------------------------------
         self.model_name=self.model.model_names[0]
         #----------------配置字典内层---------------------------------------------------
@@ -35,7 +35,10 @@ class yolo_detector_node(Node):
         #--------------配置反量化(换回真实的数值)----------------------------------------
         self.model_outputquants=self.model.output_quants[self.model_name]
         #--------------订阅者节点创建---------------------------------------------------
+        #订阅RGB相机
         self.create_subscription(Image,"Image_raw",self.yolo_callback,3)
+        #订阅深度相机
+        self.create_subscription(Depth,"depth_raw",self.depth_callback,3)
         #-------------输入形状的长宽----------------------------------------------------
         self.input_H=self.model_inputshape[self.model_inputname[0]][2]
         self.input_W=self.model_inputshape[self.model_inputname[0]][3]
@@ -66,6 +69,9 @@ class yolo_detector_node(Node):
         #yolo识别后图像发布,发布者工作
         self.yolo_debug=self.create_publisher(Image,"yolo_debug",3)
 
+        #深度图像保存
+        self.depth=None
+
         #实例化cvbrige用于图像转换
         self.brige=CvBridge()
 
@@ -79,7 +85,7 @@ class yolo_detector_node(Node):
         print("--- 模型元数据结束 ---")
 
     """
-    @brief:订阅者回调函数
+    @brief:RGB相机订阅者回调
     """
     def yolo_callback(self,msg:Image):
         try:
@@ -95,6 +101,48 @@ class yolo_detector_node(Node):
         coco_names=common.load_class_names(coco_path)
         yolo_img=draw.draw_boxes(frame,boxes,cls_ids,scores,coco_names,common.rdk_colors)
         self.yolo_debug.publish(self.brige.cv2_to_imgmsg(yolo_img,"bgr8"))
+
+        if self.depth is None:
+            print(f"图像数据没有收到")
+
+        #3D坐标计算
+        #置信度最高
+        max_idx=np.argmax(scores)
+        box=boxes[max_ids]
+
+        #计算原始的图像坐标中心点(u,v)
+        u=int((box[0]+box[2])/2.0)
+        v=int((box[1]+box[3])/2.0)
+
+        #中心点所对应的深度值
+        raw_depth=self.depth[v,u]
+        
+        print(f"调试: 中心点({u},{v}), 深度原始值 = {raw_depth}")
+
+        if raw_depth>0:
+            z=float(raw_depth)/1000.0
+
+            if z>0.1 and z<1.5:
+                # 640x400 下的精准内参
+                fx = 345.20
+                fy = 383.51
+                cx = 320.54
+                cy = 201.14
+
+                X=(u-cx)*z/fx
+                Y=(v-cy)*z/fy
+                self.get_logger().info(f"purple_block{X},{Y},{z},{raw_depth}")
+
+    """
+    @brief:深度相机订阅者回调
+    """
+    def depth_callback(self,msg:Image):
+        try:
+            self.depth=self.brige.imgmsg_to_cv2(msg,desired_encoding="passthrough")
+        except Exception as e:
+            self.get_logger().info(f"图像转换失败的原因是{e}")
+            return 
+
 
     """
     @brief:用于设置优先级和BPU推理核心
