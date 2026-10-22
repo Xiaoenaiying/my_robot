@@ -17,6 +17,7 @@ import utils.postprocess_utils as postprocess
 import utils.common_utils as common
 import utils.draw_utils as draw
 import numpy as np
+from geometry_msgs.msg import PointStamped
 
 class yolo_detector_node(Node):
     def __init__(self):
@@ -38,7 +39,7 @@ class yolo_detector_node(Node):
         #订阅RGB相机
         self.create_subscription(Image,"Image_raw",self.yolo_callback,3)
         #订阅深度相机
-        self.create_subscription(Depth,"depth_raw",self.depth_callback,3)
+        self.create_subscription(Image,"depth_raw",self.depth_callback,3)
         #-------------输入形状的长宽----------------------------------------------------
         self.input_H=self.model_inputshape[self.model_inputname[0]][2]
         self.input_W=self.model_inputshape[self.model_inputname[0]][3]
@@ -62,12 +63,10 @@ class yolo_detector_node(Node):
         self.reg=16#回归张量数量
         self.weights_static = np.arange(self.reg, dtype=np.float32)[np.newaxis, np.newaxis, :]#DFL解码常用权重
 
-        #-------------模型能识别的尺寸---------------------------------------------------
-        self.input_W = 640
-        self.input_H = 640
-
         #yolo识别后图像发布,发布者工作
-        self.yolo_debug=self.create_publisher(Image,"yolo_debug",3)
+        self.yolo_debug=self.create_publisher(Image,"/yolo_debug",3)
+        #物块抓取坐标发布
+        self.yolo_Coordinates=self.create_publisher(PointStamped,"/arm_target",3)
 
         #深度图像保存
         self.depth=None
@@ -96,7 +95,9 @@ class yolo_detector_node(Node):
         self.yolo_set_scheduling_params(priority=1,bpu_cores=[2])
         pre_camera=self.yolo_pre_process(frame)
         yolo_run_camera=self.yolo_foward(pre_camera)
-        boxes,cls_ids,scores=self.yolo_post_process(yolo_run_camera,self.input_W,self.input_H)
+        W=640
+        H=640
+        boxes,cls_ids,scores=self.yolo_post_process(yolo_run_camera,W,H)
         coco_path=os.path.join(self.pkg_name,"my_yolo_checkself","coco_classes.names")
         coco_names=common.load_class_names(coco_path)
         yolo_img=draw.draw_boxes(frame,boxes,cls_ids,scores,coco_names,common.rdk_colors)
@@ -104,35 +105,64 @@ class yolo_detector_node(Node):
 
         if self.depth is None:
             print(f"图像数据没有收到")
-
-        #3D坐标计算
-        #置信度最高
-        max_idx=np.argmax(scores)
-        box=boxes[max_ids]
-
-        #计算原始的图像坐标中心点(u,v)
-        u=int((box[0]+box[2])/2.0)
-        v=int((box[1]+box[3])/2.0)
-
-        #中心点所对应的深度值
-        raw_depth=self.depth[v,u]
+            return
         
-        print(f"调试: 中心点({u},{v}), 深度原始值 = {raw_depth}")
+        try:
+            #3D坐标计算
+            #置信度最高
+            max_idx=np.argmax(scores)
+            box=boxes[max_idx]
 
-        if raw_depth>0:
-            z=float(raw_depth)/1000.0
+            #计算原始的图像坐标中心点(u,v)
+            u=int((box[0]+box[2])/2.0)
+            v=int((box[1]+box[3])/2.0)
 
-            if z>0.1 and z<1.5:
-                # 640x400 下的精准内参
-                fx = 345.20
-                fy = 383.51
-                cx = 320.54
-                cy = 201.14
+            h_depth,w_depth=self.depth.shape[:2]
 
-                X=(u-cx)*z/fx
-                Y=(v-cy)*z/fy
-                self.get_logger().info(f"purple_block{X},{Y},{z},{raw_depth}")
+            u_rel=u
+            v_rel=int(v*(h_depth/640.0))
 
+            u_rel = min(u_rel, w_depth - 1)
+            v_rel = min(v_rel, h_depth - 1)
+            u_rel = max(0, u_rel)
+            v_rel = max(0, v_rel)
+            
+            # 必须打印出来看！
+            print(f"模型原坐标({u_rel},{v_rel}) -> 强制限幅后坐标({u_rel},{v_rel}), 深度图尺寸({h_depth},{w_depth})")
+
+
+            #中心点所对应的深度值
+            raw_depth=self.depth[v_rel,u_rel]
+        
+            print(f"调试: 中心点({u},{v}), 深度原始值 = {raw_depth}")
+
+            if raw_depth>0:
+                z=float(raw_depth)/65000.0
+                print(f"紫色物块深度值为{z}")
+
+                if z>0.1 and z<1.5:
+                    # 640x400 下的精准内参
+                    fx = 345.20
+                    fy = 383.51
+                    cx = 320.54
+                    cy = 201.14
+
+                    X=(u-cx)*z/fx
+                    Y=(v_rel-cy)*z/fy
+                    target_msg=PointStamped()
+                    #打上时间戳
+                    target_msg.header.stamp=self.get_clock().now().to_msg()
+                    #相机坐标系
+                    target_msg.header.frame_id="camera_link"
+                    #坐标打包
+                    target_msg.point.x=X
+                    target_msg.point.y=Y
+                    target_msg.point.z=z
+                    self.get_logger().info(f"purple_block{X},{Y},{z},{raw_depth}")
+                    self.yolo_Coordinates.publish(target_msg)
+        except Exception as e:
+                print(f"error is {e}")
+            
     """
     @brief:深度相机订阅者回调
     """

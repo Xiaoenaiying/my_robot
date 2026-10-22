@@ -1,12 +1,10 @@
 .vscode/
 __pycache__/
 *.pyc
-*.bin
 *.hbm
 *.lock.vscode/
 __pycache__/
 *.pyc
-*.bin
 *.hbm
 *.pt
 *.lock
