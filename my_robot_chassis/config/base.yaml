@@ -1,0 +1,56 @@
+origintank_node:
+  ros__parameters:
+    #底盘端口
+    cmd_port: "/dev/ttyUSB0" 
+    
+    #底盘波特率
+    baud_rate: "B115200"
+
+    #速度话题
+    cmd_vel_topic: "/cmd_vel"
+
+    #odom话题
+    odom_topic: "/odom"
+
+    #
+    odom_frame: "odom"
+
+    odom_child_frame: "base_footprint"
+
+    #IMU话题
+    imu_topic: "/imu"
+
+    imu_frame: "imu_link"
+
+    ultrasonic_topic: "/ultrasonic/front/range"
+
+    ultrasonic_frame: "ultrasonic_front_link"
+
+    ultrasonic_min_range_m: 0.03
+
+    ultrasonic_max_range_m: 4.0
+
+    ultrasonic_unit_scale_m: 0.01
+ 
+    ultrasonic_field_of_view_rad: 0.26
+
+    debug_num: 0
+
+    coeff_odom_x: 1.131
+
+    coeff_odom_y: 1.077
+
+    current_type: "M100"
+
+    cmd_vel_linear_max: 0.3
+
+    cmd_vel_linear_min: 0.0
+
+    cmd_vel_anglar_max: 2.0
+
+    cmd_vel_anglar_min: 0.0
+ 
+    cmd_vel_angle_max: 25.0
+ 
+    cmd_vel_angle_min: 0.0
+  

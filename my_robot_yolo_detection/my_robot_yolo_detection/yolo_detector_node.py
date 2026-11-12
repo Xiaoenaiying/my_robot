@@ -158,7 +158,7 @@ class yolo_detector_node(Node):
                     target_msg.point.x=X
                     target_msg.point.y=Y
                     target_msg.point.z=z
-                    self.get_logger().info(f"purple_block{X},{Y},{z},{raw_depth}")
+                    print(f"purple_block{X},{Y},{z},{raw_depth}")
                     self.yolo_Coordinates.publish(target_msg)
         except Exception as e:
                 print(f"error is {e}")

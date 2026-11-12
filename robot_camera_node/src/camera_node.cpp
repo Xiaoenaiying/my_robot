@@ -135,7 +135,7 @@ int main(int argc,char** argv){
             RCLCPP_WARN_THROTTLE(node->get_logger(),*node->get_clock(),1000,"该格式无法传输");
         }
             auto img_msg=cv_bridge::CvImage(std_msgs::msg::Header(),ros2formats,frame).toImageMsg();
-            img_msg->header.stamp=node->now();//打上时间戳
+            img_msg->header.stamp=node->get_clock()->now();//打上时间戳
             color_pub->publish(*img_msg);//发布数据   
             loop_rate.sleep();
         }
@@ -156,7 +156,7 @@ int main(int argc,char** argv){
         std::string ros2formats;
             ros2formats="16UC1";
             auto img_msg=cv_bridge::CvImage(std_msgs::msg::Header(),ros2formats,frame).toImageMsg();
-            img_msg->header.stamp=node->now();//打上时间戳
+            img_msg->header.stamp=node->get_clock()->now();//打上时间戳
             depth_pub->publish(*img_msg);//发布数据   
             loop_rate.sleep();
         }
