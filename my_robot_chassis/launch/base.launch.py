@@ -23,4 +23,11 @@ def generate_launch_description():
             executable='origintank_node',
             name='origintank_node',
             parameters=[config]
+        )
+        Node(
+            package='tf2_ros',
+            executable='static_transform_publisher',
+            name='base_to_camera_tf',
+            # 参数顺序：X Y Z Yaw Pitch Roll 父坐标系 子坐标系
+            arguments=['0.11', '0.0', '0.5', '0.0', '0.0', '0.0', 'base_footprint', 'camera_link']
         )])

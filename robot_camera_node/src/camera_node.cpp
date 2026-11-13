@@ -136,6 +136,7 @@ int main(int argc,char** argv){
         }
             auto img_msg=cv_bridge::CvImage(std_msgs::msg::Header(),ros2formats,frame).toImageMsg();
             img_msg->header.stamp=node->get_clock()->now();//打上时间戳
+            img_msg->header.frame_id="camera_link";
             color_pub->publish(*img_msg);//发布数据   
             loop_rate.sleep();
         }
@@ -157,6 +158,7 @@ int main(int argc,char** argv){
             ros2formats="16UC1";
             auto img_msg=cv_bridge::CvImage(std_msgs::msg::Header(),ros2formats,frame).toImageMsg();
             img_msg->header.stamp=node->get_clock()->now();//打上时间戳
+            img_msg->header.frame_id="camera_link";
             depth_pub->publish(*img_msg);//发布数据   
             loop_rate.sleep();
         }
