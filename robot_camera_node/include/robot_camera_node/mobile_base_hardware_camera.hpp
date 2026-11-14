@@ -8,6 +8,7 @@
 #include <vector>
 #include <linux/videodev2.h>
 #include <sys/mman.h>
+#include <mutex>
 #include <opencv2/opencv.hpp>
   
 //opencv里的翻转
@@ -52,14 +53,5 @@ private:
     //一帧生命周期内保存画面
     void *camera_address;
 };
-
-
-
-
-
-
-
-
-
 
 #endif //monile_base_hardware_camera.hpp
