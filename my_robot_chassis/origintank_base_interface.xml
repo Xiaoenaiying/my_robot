@@ -1,0 +1,9 @@
+<library path="my_robot_chassis">
+    <class name="origintank/origintankhardware"
+            type="origintank::origintankhardware"
+            base_class_type="hardware_interface::SystemInterface">
+        <description>
+            面向麦克纳母轮底盘
+        </description>
+    </class>    
+</library>

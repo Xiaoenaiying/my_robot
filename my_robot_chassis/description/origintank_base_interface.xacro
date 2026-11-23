@@ -1,0 +1,48 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+    <xacro:macro name="bbot_control" params="use_sim:=false">
+        <ros2_control name="bbot_interface" type="system">
+            <xacro:if value="${use_sim}">
+                <hardware>
+                    <plugin>gazebo_ros2_control/GazeboSystem</plugin>
+                </hardware>
+            </xacro:if>
+            <xacro:unless value="${use_sim}">
+                <hardware>
+                    <plugin>my_robot_chassis/origintank::origintankhardware</plugin>
+                </hardware>
+            </xacro:unless>
+
+            <joint name="base_left_front_wheel_joint">
+                <command_interface name="velocity"/> 
+                <state_interface name="position"/>
+                <state_interface name="velocity"/>
+            </joint>
+
+            <joint name="base_left_rear_wheel_joint">
+                <command_interface name="velocity"/> 
+                <state_interface name="position"/>
+                <state_interface name="velocity"/>
+            </joint>
+            
+            <joint name="base_right_front_wheel_joint">
+                <command_interface name="velocity"/>
+                <state_interface name="position"/>
+                <state_interface name="velocity"/>
+            </joint>
+
+            <joint name="base_right_rear_wheel_joint">
+                <command_interface name="velocity"/>
+                <state_interface name="position"/>
+                <state_interface name="velocity"/>
+            </joint>
+        </ros2_control>
+
+        <gazebo>
+            <plugin filename="libgazebo_ros2_control.so" name="gazebo_ros2_control">
+                <parameters>$(find my_robot_chassis)/config/base.yaml</parameters>
+            </plugin>
+        </gazebo>
+
+    </xacro:macro>
+</robot>

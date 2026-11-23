@@ -1,0 +1,345 @@
+{
+  "root_motion": "fixed",
+  "robot_name": "generated_robot",
+  "coordinate_schema_version": 3,
+  "coordinate_frame": "z_up_x_forward",
+  "links": [
+    {
+      "link_id": "link_001",
+      "name": "base_link",
+      "part_ids": [
+        "part_001",
+        "part_003",
+        "part_002",
+        "part_004",
+        "part_005",
+        "part_006",
+        "part_011"
+      ],
+      "mass": 2.356950074432111,
+      "inertia": {
+        "ixx": 0.025216319996101747,
+        "iyy": 0.03263591651462019,
+        "izz": 0.04398310871775094,
+        "ixy": 2.6760898164505238e-8,
+        "ixz": -0.0015178804741793654,
+        "iyz": 3.808772820059959e-7
+      },
+      "visual_meshes": [],
+      "collision_meshes": [],
+      "sites": [],
+      "mass_properties": {
+        "source": "geometry",
+        "mass": 2.356950074432111,
+        "com_xyz_cad": [
+          -10.281289211875135,
+          13.284334684285373,
+          1099.540038240105
+        ],
+        "inertia_com_cad": {
+          "ixx": 0.025216319996101747,
+          "iyy": 0.03263591651462019,
+          "izz": 0.04398310871775094,
+          "ixy": 2.6760898164505238e-8,
+          "ixz": -0.0015178804741793654,
+          "iyz": 3.808772820059959e-7
+        },
+        "quality": "exact_mesh",
+        "units": "kg_m2",
+        "volume_m3": 0.0019641250620267593
+      }
+    },
+    {
+      "link_id": "link_002",
+      "name": "base_left_front_wheel_link",
+      "part_ids": [
+        "part_009"
+      ],
+      "mass": 0.4158544022372722,
+      "inertia": {
+        "ixx": 0.00042318591945342303,
+        "iyy": 0.0007137257011084776,
+        "izz": 0.0004231600775511074,
+        "ixy": 3.788782282553441e-9,
+        "ixz": 3.063238291046446e-8,
+        "iyz": 3.200610672726105e-9
+      },
+      "visual_meshes": [],
+      "collision_meshes": [],
+      "sites": [],
+      "mass_properties": {
+        "source": "geometry",
+        "mass": 0.4158544022372722,
+        "com_xyz_cad": [
+          106.1253859895622,
+          169.5712119576445,
+          1070.3951738260848
+        ],
+        "inertia_com_cad": {
+          "ixx": 0.00042318591945342303,
+          "iyy": 0.0007137257011084776,
+          "izz": 0.0004231600775511074,
+          "ixy": 3.788782282553441e-9,
+          "ixz": 3.063238291046446e-8,
+          "iyz": 3.200610672726105e-9
+        },
+        "quality": "exact_mesh",
+        "units": "kg_m2",
+        "volume_m3": 0.00034654533519772686
+      }
+    },
+    {
+      "link_id": "link_003",
+      "name": "base_left_rear_wheel_link",
+      "part_ids": [
+        "part_010"
+      ],
+      "mass": 0.415854408525228,
+      "inertia": {
+        "ixx": 0.0004232033144094511,
+        "iyy": 0.0007137257371771762,
+        "izz": 0.000423142717816834,
+        "ixy": -4.936930869857553e-9,
+        "ixz": -1.3682893415760214e-8,
+        "iyz": 4.781774257397352e-10
+      },
+      "visual_meshes": [],
+      "collision_meshes": [],
+      "sites": [],
+      "mass_properties": {
+        "source": "geometry",
+        "mass": 0.415854408525228,
+        "com_xyz_cad": [
+          -134.3806122038473,
+          169.5712118973906,
+          1070.3964334438895
+        ],
+        "inertia_com_cad": {
+          "ixx": 0.0004232033144094511,
+          "iyy": 0.0007137257371771762,
+          "izz": 0.000423142717816834,
+          "ixy": -4.936930869857553e-9,
+          "ixz": -1.3682893415760214e-8,
+          "iyz": 4.781774257397352e-10
+        },
+        "quality": "exact_mesh",
+        "units": "kg_m2",
+        "volume_m3": 0.00034654534043769
+      }
+    },
+    {
+      "link_id": "link_004",
+      "name": "base_right_front_wheel_link",
+      "part_ids": [
+        "part_007"
+      ],
+      "mass": 0.4158558027026464,
+      "inertia": {
+        "ixx": 0.00042314805296758153,
+        "iyy": 0.0007137323630821997,
+        "izz": 0.00042320579917276893,
+        "ixy": -2.4962918701596e-9,
+        "ixz": -6.040778137890238e-9,
+        "iyz": 5.7116472091526966e-9
+      },
+      "visual_meshes": [],
+      "collision_meshes": [],
+      "sites": [],
+      "mass_properties": {
+        "source": "geometry",
+        "mass": 0.4158558027026464,
+        "com_xyz_cad": [
+          106.12463954239425,
+          -142.9994310599774,
+          1070.3965687833204
+        ],
+        "inertia_com_cad": {
+          "ixx": 0.00042314805296758153,
+          "iyy": 0.0007137323630821997,
+          "izz": 0.00042320579917276893,
+          "ixy": -2.4962918701596e-9,
+          "ixz": -6.040778137890238e-9,
+          "iyz": 5.7116472091526966e-9
+        },
+        "quality": "exact_mesh",
+        "units": "kg_m2",
+        "volume_m3": 0.0003465465022522053
+      }
+    },
+    {
+      "link_id": "link_005",
+      "name": "base_right_rear_wheel_link",
+      "part_ids": [
+        "part_008"
+      ],
+      "mass": 0.415855814866585,
+      "inertia": {
+        "ixx": 0.00042320255693348025,
+        "iyy": 0.0007137323933118334,
+        "izz": 0.00042315132847972235,
+        "ixy": -6.224745197467034e-9,
+        "ixz": -1.4647358224893531e-8,
+        "iyz": -3.082482312475726e-10
+      },
+      "visual_meshes": [],
+      "collision_meshes": [],
+      "sites": [],
+      "mass_properties": {
+        "source": "geometry",
+        "mass": 0.415855814866585,
+        "com_xyz_cad": [
+          -134.38256412313734,
+          -142.99943112546035,
+          1070.395073375503
+        ],
+        "inertia_com_cad": {
+          "ixx": 0.00042320255693348025,
+          "iyy": 0.0007137323933118334,
+          "izz": 0.00042315132847972235,
+          "ixy": -6.224745197467034e-9,
+          "ixz": -1.4647358224893531e-8,
+          "iyz": -3.082482312475726e-10
+        },
+        "quality": "exact_mesh",
+        "units": "kg_m2",
+        "volume_m3": 0.00034654651238882086
+      }
+    }
+  ],
+  "joints": [
+    {
+      "joint_id": "base_left_front_wheel_joint",
+      "name": "base_left_front_wheel_joint",
+      "type": "continuous",
+      "parent": "base_link",
+      "child": "base_left_front_wheel_link",
+      "origin": {
+        "xyz": [
+          106.12595394,
+          159.28593063,
+          1070.39615533
+        ],
+        "rpy": [
+          1.5707963267948966,
+          0,
+          0
+        ]
+      },
+      "axis": [
+        0,
+        -1,
+        0
+      ],
+      "limit": {
+        "lower": -1.57,
+        "upper": 1.57,
+        "effort": 10,
+        "velocity": 5
+      },
+      "actuation": "auto",
+      "frame_orientation_mode": "axis_aligned"
+    },
+    {
+      "joint_id": "base_left_rear_wheel_joint",
+      "name": "base_left_rear_wheel_joint",
+      "type": "continuous",
+      "parent": "base_link",
+      "child": "base_left_rear_wheel_link",
+      "origin": {
+        "xyz": [
+          -134.38171107,
+          159.28593063,
+          1070.39615533
+        ],
+        "rpy": [
+          1.5707963267948966,
+          0,
+          0
+        ]
+      },
+      "axis": [
+        0,
+        -1,
+        0
+      ],
+      "limit": {
+        "lower": -1.57,
+        "upper": 1.57,
+        "effort": 10,
+        "velocity": 5
+      },
+      "actuation": "auto",
+      "frame_orientation_mode": "axis_aligned"
+    },
+    {
+      "joint_id": "base_right_front_wheel_joint",
+      "name": "base_right_front_wheel_joint",
+      "type": "continuous",
+      "parent": "base_link",
+      "child": "base_right_front_wheel_link",
+      "origin": {
+        "xyz": [
+          106.12595394,
+          -132.71406937,
+          1070.39615533
+        ],
+        "rpy": [
+          1.5707963267948966,
+          0,
+          0
+        ]
+      },
+      "axis": [
+        0,
+        -1,
+        0
+      ],
+      "limit": {
+        "lower": -1.57,
+        "upper": 1.57,
+        "effort": 10,
+        "velocity": 5
+      },
+      "actuation": "auto",
+      "frame_orientation_mode": "axis_aligned"
+    },
+    {
+      "joint_id": "base_right_rear_wheel_joint",
+      "name": "base_right_rear_wheel_joint",
+      "type": "continuous",
+      "parent": "base_link",
+      "child": "base_right_rear_wheel_link",
+      "origin": {
+        "xyz": [
+          -134.38171107,
+          -132.71406937,
+          1070.39615533
+        ],
+        "rpy": [
+          1.5707963267948966,
+          0,
+          0
+        ]
+      },
+      "axis": [
+        0,
+        -1,
+        0
+      ],
+      "limit": {
+        "lower": -1.57,
+        "upper": 1.57,
+        "effort": 10,
+        "velocity": 5
+      },
+      "actuation": "auto",
+      "frame_orientation_mode": "axis_aligned"
+    }
+  ],
+  "base_origin_mode": "cad_original",
+  "base_origin_xyz": [
+    -15.01782227000001,
+    13.285930629999996,
+    1129.0152626049999
+  ]
+}

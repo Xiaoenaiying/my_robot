@@ -1,0 +1,202 @@
+<?xml version='1.0' encoding='utf-8'?>
+<robot name="bbot_robot">
+  <link name="base_link">
+    <inertial>
+      <origin xyz="0.0047365331 -1.5959457e-06 -0.029475224" rpy="0 0 0" />
+      <mass value="2.3569501" />
+      <inertia ixx="0.02521632" iyy="0.032635917" izz="0.043983109" ixy="2.6760898e-08" ixz="-0.0015178805" iyz="3.8087728e-07" />
+    </inertial>
+    <visual>
+      <origin xyz="0.015017822 -0.013285931 -1.1290153" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="package://my_robot_chassis/description/meshes/part_001_solid_001.stl" scale="0.001 0.001 0.001" />
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.015017822 -0.013285931 -1.1290153" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="package://my_robot_chassis/description/meshes/part_003_solid_003.stl" scale="0.001 0.001 0.001" />
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.015017822 -0.013285931 -1.1290153" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="package://my_robot_chassis/description/meshes/part_002_solid_002.stl" scale="0.001 0.001 0.001" />
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.015017822 -0.013285931 -1.1290153" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="package://my_robot_chassis/description/meshes/part_004_solid_004.stl" scale="0.001 0.001 0.001" />
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.015017822 -0.013285931 -1.1290153" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="package://my_robot_chassis/description/meshes/part_005_solid_005.stl" scale="0.001 0.001 0.001" />
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.015017822 -0.013285931 -1.1290153" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="package://my_robot_chassis/description/meshes/part_006_solid_006.stl" scale="0.001 0.001 0.001" />
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.015017822 -0.013285931 -1.1290153" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="package://my_robot_chassis/description/meshes/part_011_solid_011.stl" scale="0.001 0.001 0.001" />
+      </geometry>
+    </visual>
+    <collision>
+      <origin xyz="0.015017822 -0.013285931 -1.1290153" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="package://my_robot_chassis/description/meshes/part_001_solid_001.stl" scale="0.001 0.001 0.001" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.015017822 -0.013285931 -1.1290153" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="package://my_robot_chassis/description/meshes/part_003_solid_003.stl" scale="0.001 0.001 0.001" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.015017822 -0.013285931 -1.1290153" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="package://my_robot_chassis/description/meshes/part_002_solid_002.stl" scale="0.001 0.001 0.001" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.015017822 -0.013285931 -1.1290153" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="package://my_robot_chassis/description/meshes/part_004_solid_004.stl" scale="0.001 0.001 0.001" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.015017822 -0.013285931 -1.1290153" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="package://my_robot_chassis/description/meshes/part_005_solid_005.stl" scale="0.001 0.001 0.001" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.015017822 -0.013285931 -1.1290153" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="package://my_robot_chassis/description/meshes/part_006_solid_006.stl" scale="0.001 0.001 0.001" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.015017822 -0.013285931 -1.1290153" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="package://my_robot_chassis/description/meshes/part_011_solid_011.stl" scale="0.001 0.001 0.001" />
+      </geometry>
+    </collision>
+  </link>
+  <link name="base_left_front_wheel_link">
+    <inertial>
+      <origin xyz="-5.6795044e-07 -9.8150392e-07 -0.010285281" rpy="0 0 0" />
+      <mass value="0.4158544" />
+      <inertia ixx="0.00042318592" iyy="0.00042316008" izz="0.0007137257" ixy="3.0632383e-08" ixz="-3.7887823e-09" iyz="-3.2006107e-09" />
+    </inertial>
+    <visual>
+      <origin xyz="-0.10612595 -1.0703962 0.15928593" rpy="-1.5707963 0 0" />
+      <geometry>
+        <mesh filename="package://my_robot_chassis/description/meshes/part_009_solid_009.stl" scale="0.001 0.001 0.001" />
+      </geometry>
+    </visual>
+    <collision>
+      <origin xyz="-0.10612595 -1.0703962 0.15928593" rpy="-1.5707963 0 0" />
+      <geometry>
+        <mesh filename="package://my_robot_chassis/description/meshes/part_009_solid_009.stl" scale="0.001 0.001 0.001" />
+      </geometry>
+    </collision>
+  </link>
+  <link name="base_left_rear_wheel_link">
+    <inertial>
+      <origin xyz="1.0988662e-06 2.7811389e-07 -0.010285281" rpy="0 0 0" />
+      <mass value="0.41585441" />
+      <inertia ixx="0.00042320331" iyy="0.00042314272" izz="0.00071372574" ixy="-1.3682893e-08" ixz="4.9369309e-09" iyz="-4.7817743e-10" />
+    </inertial>
+    <visual>
+      <origin xyz="0.13438171 -1.0703962 0.15928593" rpy="-1.5707963 0 0" />
+      <geometry>
+        <mesh filename="package://my_robot_chassis/description/meshes/part_010_solid_010.stl" scale="0.001 0.001 0.001" />
+      </geometry>
+    </visual>
+    <collision>
+      <origin xyz="0.13438171 -1.0703962 0.15928593" rpy="-1.5707963 0 0" />
+      <geometry>
+        <mesh filename="package://my_robot_chassis/description/meshes/part_010_solid_010.stl" scale="0.001 0.001 0.001" />
+      </geometry>
+    </collision>
+  </link>
+  <link name="base_right_front_wheel_link">
+    <inertial>
+      <origin xyz="-1.3143976e-06 4.1345332e-07 0.010285362" rpy="0 0 0" />
+      <mass value="0.4158558" />
+      <inertia ixx="0.00042314805" iyy="0.0004232058" izz="0.00071373236" ixy="-6.0407781e-09" ixz="2.4962919e-09" iyz="-5.7116472e-09" />
+    </inertial>
+    <visual>
+      <origin xyz="-0.10612595 -1.0703962 -0.13271407" rpy="-1.5707963 0 0" />
+      <geometry>
+        <mesh filename="package://my_robot_chassis/description/meshes/part_007_solid_007.stl" scale="0.001 0.001 0.001" />
+      </geometry>
+    </visual>
+    <collision>
+      <origin xyz="-0.10612595 -1.0703962 -0.13271407" rpy="-1.5707963 0 0" />
+      <geometry>
+        <mesh filename="package://my_robot_chassis/description/meshes/part_007_solid_007.stl" scale="0.001 0.001 0.001" />
+      </geometry>
+    </collision>
+  </link>
+  <link name="base_right_rear_wheel_link">
+    <inertial>
+      <origin xyz="-8.5305314e-07 -1.0819545e-06 0.010285362" rpy="0 0 0" />
+      <mass value="0.41585581" />
+      <inertia ixx="0.00042320256" iyy="0.00042315133" izz="0.00071373239" ixy="-1.4647358e-08" ixz="6.2247452e-09" iyz="3.0824823e-10" />
+    </inertial>
+    <visual>
+      <origin xyz="0.13438171 -1.0703962 -0.13271407" rpy="-1.5707963 0 0" />
+      <geometry>
+        <mesh filename="package://my_robot_chassis/description/meshes/part_008_solid_008.stl" scale="0.001 0.001 0.001" />
+      </geometry>
+    </visual>
+    <collision>
+      <origin xyz="0.13438171 -1.0703962 -0.13271407" rpy="-1.5707963 0 0" />
+      <geometry>
+        <mesh filename="package://my_robot_chassis/description/meshes/part_008_solid_008.stl" scale="0.001 0.001 0.001" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="base_left_front_wheel_joint" type="continuous">
+    <origin xyz="0.12114378 0.146 -0.058619107" rpy="1.5707963 0 0" />
+    <parent link="base_link" />
+    <child link="base_left_front_wheel_link" />
+    <axis xyz="0 0 1" />
+    <dynamics damping="0" friction="0" />
+    <limit effort="10" velocity="5" />
+  </joint>
+  <joint name="base_left_rear_wheel_joint" type="continuous">
+    <origin xyz="-0.11936389 0.146 -0.058619107" rpy="1.5707963 0 0" />
+    <parent link="base_link" />
+    <child link="base_left_rear_wheel_link" />
+    <axis xyz="0 0 1" />
+    <dynamics damping="0" friction="0" />
+    <limit effort="10" velocity="5" />
+  </joint>
+  <joint name="base_right_front_wheel_joint" type="continuous">
+    <origin xyz="0.12114378 -0.146 -0.058619107" rpy="1.5707963 0 0" />
+    <parent link="base_link" />
+    <child link="base_right_front_wheel_link" />
+    <axis xyz="0 0 1" />
+    <dynamics damping="0" friction="0" />
+    <limit effort="10" velocity="5" />
+  </joint>
+  <joint name="base_right_rear_wheel_joint" type="continuous">
+    <origin xyz="-0.11936389 -0.146 -0.058619107" rpy="1.5707963 0 0" />
+    <parent link="base_link" />
+    <child link="base_right_rear_wheel_link" />
+    <axis xyz="0 0 1" />
+    <dynamics damping="0" friction="0" />
+    <limit effort="10" velocity="5" />
+  </joint>
+</robot>

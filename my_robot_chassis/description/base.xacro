@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro"  name="bbot_robot">
+
+  <xacro:arg name="use_sim" default="false"/>
+  <xacro:include filename="origintank_base.xacro"/>
+  <xacro:include filename="origintank_base_interface.xacro"/>
+  <xacro:bbot_control use_sim="$(arg use_sim)"/>
+
+</robot>
